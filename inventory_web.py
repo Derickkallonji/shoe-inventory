@@ -2,7 +2,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os
 import json
-import vercel_storage.blob as vercel_blob
 
 app = Flask(__name__)
 
@@ -29,43 +28,52 @@ class Shoe:
 shoe_list = []
 
 def read_shoes_data():
-    """Read shoe data from Vercel Blob or local inventory.txt."""
+    """Read shoe data from inventory.txt (local) or /tmp/inventory.json (Vercel)."""
     shoe_list.clear()
+    file_path = '/tmp/inventory.json' if os.environ.get('VERCEL') else 'inventory.txt'
     try:
-        # Try to read from Vercel Blob
-        blob = vercel_blob.get("inventory.json")
-        if blob:
-            data = json.loads(blob.decode('utf-8'))
-            for item in data:
-                shoe_list.append(Shoe(
-                    item["country"], item["code"], item["product"],
-                    item["cost"], item["quantity"]
-                ))
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                if file_path.endswith('.json'):
+                    data = json.load(file)
+                    for item in data:
+                        shoe_list.append(Shoe(
+                            item["country"], item["code"], item["product"],
+                            item["cost"], item["quantity"]
+                        ))
+                else:
+                    lines = file.readlines()[1:]  # Skip header
+                    for line in lines:
+                        data = line.strip().split(',')
+                        if len(data) != 5:
+                            continue
+                        try:
+                            country, code, product, cost, quantity = data
+                            float(cost)
+                            int(quantity)
+                            shoe_list.append(Shoe(country, code, product, cost, quantity))
+                        except ValueError:
+                            continue
         else:
-            # Fallback to local inventory.txt for initial setup
-            if os.path.exists('inventory.txt'):
-                with open('inventory.txt', 'r') as file:
-                    lines = file.readlines()
-                    if len(lines) > 1:  # Skip header
-                        for line in lines[1:]:
-                            data = line.strip().split(',')
-                            if len(data) != 5:
-                                continue
-                            try:
-                                country, code, product, cost, quantity = data
-                                float(cost)
-                                int(quantity)
-                                shoe_list.append(Shoe(country, code, product, cost, quantity))
-                            except ValueError:
-                                continue
+            if file_path.endswith('.txt'):
+                with open(file_path, 'w') as file:
+                    file.write("Country,Code,Product,Cost,Quantity\n")
     except Exception as e:
         print(f"Error reading data: {e}")
 
 def save_shoes_data():
-    """Save shoe data to Vercel Blob."""
+    """Save shoe data to /tmp/inventory.json (Vercel) or inventory.txt (local)."""
     try:
-        data = [shoe.to_dict() for shoe in shoe_list]
-        vercel_blob.put("inventory.json", json.dumps(data).encode('utf-8'))
+        file_path = '/tmp/inventory.json' if os.environ.get('VERCEL') else 'inventory.txt'
+        if file_path.endswith('.json'):
+            data = [shoe.to_dict() for shoe in shoe_list]
+            with open(file_path, 'w') as file:
+                json.dump(data, file)
+        else:
+            with open(file_path, 'w') as file:
+                file.write("Country,Code,Product,Cost,Quantity\n")
+                for shoe in shoe_list:
+                    file.write(str(shoe) + '\n')
     except Exception as e:
         print(f"Error saving data: {e}")
 
