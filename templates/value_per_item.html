@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>Value Per Item</title></head>
+<body>
+    <h1>Value Per Item</h1>
+    <p>Calculate the total value of each product in the inventory.</p>
+    <form method="post">
+        <input type="submit" value="Calculate Value">
+    </form>
+    <p>Current Shoes in Inventory: {{ shoes | length }}</p>
+    {% if not shoes %}
+        <p>No shoes available in inventory.</p>
+    {% endif %}
+
+    {% if values %}
+        <h2>Values per Product</h2>
+    {% endif %}
+
+    {% if not values and not error %}
+        <p>No values calculated yet. Click the button to calculate.</p>
+    {% endif %}
+
+    {% if not values and error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% else %}
+    <table border="1">
+        <tr><th>Product</th><th>Value</th></tr>
+        {% for product, value in values %}
+        <tr><td>{{ product }}</td><td>{{ "%.2f" | format(value) }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Back to Menu</a>
+</body>
+</html>

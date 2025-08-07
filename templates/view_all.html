@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head><title>View All Shoes</title></head>
+<body>
+    <h1>Inventory List</h1>
+    <p>Current Shoes in Inventory: {{ shoes | length }}</p>
+    <p>Use this page to view all shoes in the inventory.</p>
+
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+
+    {% if not shoes %}
+        <p>No shoes available in inventory.</p>
+    {% endif %}
+
+    {% if shoes and not error %}
+        <p>Current Shoes:</p>
+        <ul>
+            {% for shoe in shoes %}
+                <li>{{ shoe.product }} ({{ shoe.quantity }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+    {% if not shoes %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+    <p>Note: If there are no shoes, you will be prompted to add a shoe first.</p>
+    {% if shoes %}
+    <table border="1">
+        <tr>
+            <th>Country</th><th>Code</th><th>Product</th><th>Cost</th><th>Quantity</th>
+        </tr>
+        {% for shoe in shoes %}
+        <tr>
+            <td>{{ shoe.country }}</td>
+            <td>{{ shoe.code }}</td>
+            <td>{{ shoe.product }}</td>
+            <td>{{ "%.2f" | format(shoe.cost) }}</td>
+            <td>{{ shoe.quantity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No shoes in inventory!</p>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Back to Menu</a>
+</body>
+</html>

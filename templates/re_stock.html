@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head><title>Restock Shoe</title></head>
+<body>
+    <h1>Restock Shoe</h1>
+    <p>Use this page to restock the shoe with the lowest quantity.</p>
+    <p>Current Shoes in Inventory: {{ shoes | length }}</p>
+    <p>Note: If there are no shoes, you will be prompted to add a shoe first.</p>
+
+    {% if shoes %}
+        <p>Current Shoes:</p>
+        <ul>
+            {% for shoe in shoes %}
+                <li>{{ shoe.product }} ({{ shoe.quantity }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No shoes available in inventory.</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color:red">{{ error }}</p>
+    {% endif %}
+
+    {% if shoe %}
+        <p>Shoe with lowest quantity: {{ shoe.product }} ({{ shoe.quantity }})</p>
+        <form method="post">
+            <p>Add Quantity: <input type="number" name="quantity" required></p>
+            <input type="submit" value="Restock">
+        </form>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+    
+    {% if not shoes %}
+    
+    {% if shoes %}
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% endif %}
+    {% if shoe %}
+    <p>Shoe with lowest quantity: {{ shoe }}</p>
+    <p>Current Quantity: {{ shoe.quantity }}</p>
+    <p>Product: {{ shoe.product }}</p>
+    <p>Country: {{ shoe.country }}</p>
+    <p>Code: {{ shoe.code }}</p>
+    <p>Cost: {{ "%.2f" | format(shoe.cost) }}</p>
+    <p>Quantity: {{ shoe.quantity }}</p>
+    <p>Value: {{ "%.2f" | format(shoe.cost * shoe.quantity) }}</p>
+    <p>Restock this shoe by adding a quantity below:</p>
+    <form method="post">
+        <p>Add Quantity: <input type="number" name="quantity"></p>
+        <input type="submit" value="Restock">
+    </form>
+    
+    {% else %}
+    <p>{{ error }}</p>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Back to Menu</a>
+</body>
+</html>

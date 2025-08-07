@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head><title>Search Shoe</title></head>
+<body>
+    <h1>Search Shoe</h1>
+    <p>Enter the code of the shoe you want to search for:</p>
+    {% if shoes %}
+        <p>Available shoes:</p>
+        <ul>
+            {% for shoe in shoes %}
+                <li>{{ shoe.product }} (Code: {{ shoe.code }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No shoes available.</p>
+    {% endif %}
+    <p>Note: If there are no shoes, you will be prompted to add a shoe first.</p>
+    
+    {% if not shoes %}
+        <p>No shoes available in inventory.</p>
+    {% endif %}
+    {% if not shoes %}
+        <p>{{ error }}</p>
+    {% endif %}
+    {% if shoes and not shoe %}
+        <p>No shoe found with the given code.</p>
+    {% endif %}
+    {% if shoes and shoe %}
+        <p>Shoe found: {{ shoe.product }} (Code: {{ shoe.code }})</p>
+        <p>Country: {{ shoe.country }}</p>
+        <p>Cost: {{ "%.2f" | format(shoe.cost) }}</p>
+        <p>Quantity: {{ shoe.quantity }}</p>
+        <p>Value: {{ "%.2f" | format(shoe.cost * shoe.quantity) }}</p>
+    {% endif %}
+    
+    {% if shoes %}
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% endif %}
+    {% endif %}
+    {% if not shoes %}
+    <p style="color:red">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+        <p>Code: <input type="text" name="code"></p>
+        <input type="submit" value="Search">
+    </form>
+    {% if shoe %}
+    <p>Found shoe: {{ shoe }}</p>
+    {% endif %}
+    <a href="{{ url_for('home') }}">Back to Menu</a>
+</body>
+</html>

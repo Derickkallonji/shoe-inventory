@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Highest Quantity</title></head>
+<body>
+    <h1>Highest Quantity</h1>
+    {% if error %}
+    <p style="color:red">{{ error }}</p>
+    {% elif shoe %}
+    <p>Shoe with highest quantity: {{ shoe }}</p>
+    {% else %}
+    <p>No shoes found.</p>
+    {% endif %}
+    
+    {% if shoes %}
+    {% endif %}
+    <a href="{{ url_for('home') }}">Back to Menu</a>
+    <a href="{{ url_for('view_all') }}">View All Shoes</a>
+    <a href="{{ url_for('add_shoe') }}">Add New Shoe</a>
+    <a href="{{ url_for('re_stock') }}">Restock Shoes</a>
+    <a href="{{ url_for('search_shoe') }}">Search Shoe</a>
+    <a href="{{ url_for('value_per_item') }}">Value Per Item</a>
+    <a href="{{ url_for('highest_qty') }}">Highest Quantity</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('delete_shoe') }}">Delete Shoe</a>
+    <a href="{{ url_for('update_shoe') }}">Update Shoe</a>
+    <a href="{{ url_for('export_data') }}">Export Data</a>
+    <a href="{{ url_for('import_data') }}">Import Data</a>
+    <a href="{{ url_for('clear_data') }}">Clear Data</a>
+
+</body>
+</html>

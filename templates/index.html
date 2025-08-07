@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><title>Shoe Inventory System</title></head>
+<body>
+    <h1>Shoe Inventory Management System</h1>
+    <p>Welcome to the Shoe Inventory Management System. Please choose an option from the menu below:</p>
+    <h2>Menu</h2>
+    <p>Use the links below to navigate through the system:</p>
+    
+    <ul>
+        <li><a href="{{ url_for('view_all') }}">View All Shoes</a></li>
+        <li><a href="{{ url_for('add_shoe') }}">Add New Shoe</a></li>
+        <li><a href="{{ url_for('re_stock') }}">Restock Shoes</a></li>
+        <li><a href="{{ url_for('search_shoe') }}">Search Shoe</a></li>
+        <li><a href="{{ url_for('value_per_item') }}">Value Per Item</a></li>
+        <li><a href="{{ url_for('highest_qty') }}">Highest Quantity</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('delete_shoe') }}">Delete Shoe</a></li>
+        <li><a href="{{ url_for('update_shoe') }}">Update Shoe</a></li>
+        <li><a href="{{ url_for('export_data') }}">Export Data</a></li>
+        <li><a href="{{ url_for('import_data') }}">Import Data</a></li>
+        <li><a href="{{ url_for('clear_data') }}">Clear Data</a></li>
+    </ul>
+</body>
+</html>
